@@ -6,79 +6,29 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 jobs:
-  # Cancel any pending or running workflows for the same branch
-  cancel:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
         with:
-          access_token: ${{ github.token }}
-
-  build-and-deploy:
-    needs: cancel
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          node-version: '18'
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.17.0'
-          cache: 'npm'
-      
-      # Explicitly set git credentials
-      - name: Configure Git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      
-      # Create fresh lock file
-      - name: Generate Lock File
-        run: |
-          rm -f package-lock.json
-          npm install --package-lock-only
-          if [ -f "package-lock.json" ]; then
-            git add package-lock.json
-            git commit -m "chore: update package-lock.json [skip ci]" || echo "No changes to commit"
-            git push origin main || echo "No changes to push"
-          else
-            echo "Failed to generate package-lock.json"
-            exit 1
-          fi
-      
-      - name: Install Dependencies
-        run: |
-          npm ci --quiet --no-progress
-        env:
-          NODE_ENV: production
-          CI: true
+      - name: Install
+        run: npm install
       
       - name: Build
-        run: |
-          npm run build
-        env:
-          NODE_ENV: production
-          CI: true
+        run: npm run build
       
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      
-      - name: Upload artifact
+      - name: Upload
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: dist
       
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: Deploy
         uses: actions/deploy-pages@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
