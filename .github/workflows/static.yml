@@ -25,35 +25,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
       
-      - name: Debug Directory
+      - name: Clean install dependencies
         run: |
-          pwd
-          ls -la
-          
-      - name: Install dependencies with package-lock.json generation
-        run: |
-          rm -f package-lock.json
+          npm cache clean --force
+          rm -rf node_modules package-lock.json
           npm install
-        
-      - name: Verify package-lock.json
-        run: |
-          if [ -f "package-lock.json" ]; then
-            echo "package-lock.json exists"
-            ls -l package-lock.json
-          else
-            echo "package-lock.json does not exist"
-            exit 1
-          fi
       
       - name: Build
         run: npm run build
         env:
           CI: false
-      
-      - name: Debug dist directory
-        run: |
-          ls -la dist || echo "dist directory not found"
+          NODE_ENV: production
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
