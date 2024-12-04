@@ -5,14 +5,15 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+# Critical: We need write permissions for package-lock generation
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -20,36 +21,50 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
       
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '18.17.0'
+          cache: 'npm'
       
+      # Critical: Create a clean state
+      - name: Clean environment
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+      
+      # Generate a clean lock file
       - name: Generate package-lock.json
         run: |
-          echo "Generating fresh package-lock.json..."
-          npm install --package-lock-only
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+          npm install --package-lock-only --ignore-scripts
           git add package-lock.json
-          git commit -m "Add package-lock.json" || echo "No changes to commit"
+          git commit -m "chore: Generate package-lock.json [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"
       
       - name: Install dependencies
-        run: npm ci
-      
+        run: |
+          npm ci --audit=false
+        
       - name: Build
         run: npm run build
         env:
-          CI: false
+          CI: true
+          NODE_ENV: production
       
       - name: Upload artifact
+        if: success()
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
 
   deploy:
+    if: success()
     needs: build
     environment:
       name: github-pages
