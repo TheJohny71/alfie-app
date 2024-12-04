@@ -5,25 +5,29 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-# Critical: We need write permissions for package-lock generation
 permissions:
   contents: write
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  build:
+  # Cancel any pending or running workflows for the same branch
+  cancel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.0
+        with:
+          access_token: ${{ github.token }}
+
+  build-and-deploy:
+    needs: cancel
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
-          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -31,46 +35,50 @@ jobs:
           node-version: '18.17.0'
           cache: 'npm'
       
-      # Critical: Create a clean state
-      - name: Clean environment
+      # Explicitly set git credentials
+      - name: Configure Git
         run: |
-          rm -rf node_modules
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      
+      # Create fresh lock file
+      - name: Generate Lock File
+        run: |
           rm -f package-lock.json
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
+          npm install --package-lock-only
+          if [ -f "package-lock.json" ]; then
+            git add package-lock.json
+            git commit -m "chore: update package-lock.json [skip ci]" || echo "No changes to commit"
+            git push origin main || echo "No changes to push"
+          else
+            echo "Failed to generate package-lock.json"
+            exit 1
+          fi
       
-      # Generate a clean lock file
-      - name: Generate package-lock.json
+      - name: Install Dependencies
         run: |
-          npm install --package-lock-only --ignore-scripts
-          git add package-lock.json
-          git commit -m "chore: Generate package-lock.json [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
-      
-      - name: Install dependencies
-        run: |
-          npm ci --audit=false
-        
-      - name: Build
-        run: npm run build
+          npm ci --quiet --no-progress
         env:
-          CI: true
           NODE_ENV: production
+          CI: true
+      
+      - name: Build
+        run: |
+          npm run build
+        env:
+          NODE_ENV: production
+          CI: true
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
       
       - name: Upload artifact
-        if: success()
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
-
-  deploy:
-    if: success()
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
+      
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
