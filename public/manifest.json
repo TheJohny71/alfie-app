@@ -1,0 +1,16 @@
+{
+  "name": "Alfie Leave Management",
+  "short_name": "Alfie",
+  "description": "Enterprise-grade leave management application",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F5F7",
+  "theme_color": "#5E5CE6",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ]
+}
