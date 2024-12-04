@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="16" fill="#5E5CE6"/>
+  
+  <!-- "A" letter styled for leave management -->
+  <path d="M16 6 L23 24 L21 24 L19 19 L13 19 L11 24 L9 24 L16 6ZM18 17 L16 11 L14 17 L18 17Z" fill="white"/>
+  
+  <!-- Stylized leaf accent -->
+  <path d="M16 25C14 23 13 21 13 19C13 17 14 16 16 16C18 16 19 17 19 19C19 21 18 23 16 25Z" fill="#F5F5F7" fill-opacity="0.9"/>
+</svg>
