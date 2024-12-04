@@ -7,15 +7,15 @@ export default defineConfig({
   base: '/alfie-app/',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+      '@': path.resolve(__dirname, './src')
+    }
   },
   build: {
+    outDir: 'dist',
     rollupOptions: {
-      external: [],
-      output: {
-        manualChunks: undefined,
-      },
-    },
-  },
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      }
+    }
+  }
 })
