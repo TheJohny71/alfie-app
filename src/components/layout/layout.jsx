@@ -1,4 +1,3 @@
-// Copy everything between the ``` and paste into src/components/layout/layout.jsx
 import { Navbar } from "./navbar"
 import { Sidebar } from "./sidebar"
 
