@@ -1,4 +1,3 @@
-// Copy everything between the ``` and paste into src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from './components/theme/theme-provider'
