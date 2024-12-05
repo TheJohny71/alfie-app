@@ -30,6 +30,8 @@
     --border: 228 228 231;
     --input: 228 228 231;
     --ring: 94 92 230;
+    --accent: 243 243 245;
+    --accent-foreground: 0 0 0;
   }
  
   .dark {
@@ -54,6 +56,8 @@
     --border: 63 63 70;
     --input: 63 63 70;
     --ring: 94 92 230;
+    --accent: 39 39 42;
+    --accent-foreground: 255 255 255;
   }
 }
  
@@ -105,6 +109,11 @@
 
   small {
     @apply text-sm leading-relaxed;
+  }
+
+  a {
+    @apply text-primary hover:text-primary/90 transition-colors;
+    text-decoration: none;
   }
 }
 
