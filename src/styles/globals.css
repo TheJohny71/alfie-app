@@ -4,25 +4,20 @@
  
 @layer base {
   :root {
-    /* Background colors */
     --background: 240 240 243; /* #F5F5F7 Apple background gray */
     --foreground: 0 0 0;
 
-    /* Primary colors */
     --primary: 94 92 230; /* #5E5CE6 Apple system purple */
     --primary-foreground: 255 255 255;
 
-    /* Support colors */
     --muted: 152 152 157; /* #98989D */
     --muted-foreground: 99 99 102; /* #636366 */
     --subtle: 72 72 74;   /* #48484A */
 
-    /* Semantic colors */
     --success: 52 199 89; /* #34C759 */
     --warning: 255 159 10; /* #FF9F0A */
     --destructive: 255 59 48; /* #FF3B30 */
     
-    /* Component colors */
     --card: 255 255 255;
     --card-foreground: 0 0 0;
     --popover: 255 255 255;
@@ -35,7 +30,7 @@
   }
  
   .dark {
-    --background: 24 24 24;
+    --background: 28 28 30; /* Apple dark gray */
     --foreground: 255 255 255;
     
     --primary: 94 92 230;
@@ -49,9 +44,9 @@
     --warning: 255 159 10;
     --destructive: 255 69 58;
     
-    --card: 36 36 36;
+    --card: 44 44 46;
     --card-foreground: 255 255 255;
-    --popover: 36 36 36;
+    --popover: 44 44 46;
     --popover-foreground: 255 255 255;
     --border: 63 63 70;
     --input: 63 63 70;
@@ -67,53 +62,51 @@
   }
   
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   /* Typography Scale */
   h1 {
-    @apply text-4xl font-semibold leading-tight;
+    @apply text-4xl font-semibold leading-[1.2];
     font-size: 40px;
   }
   
   h2 {
-    @apply text-3xl font-semibold leading-tight;
+    @apply text-3xl font-semibold leading-[1.2];
     font-size: 32px;
   }
   
   h3 {
-    @apply text-2xl font-semibold leading-tight;
+    @apply text-2xl font-semibold leading-[1.2];
     font-size: 24px;
   }
   
   h4 {
-    @apply text-xl font-medium leading-tight;
+    @apply text-xl font-medium leading-[1.2];
     font-size: 20px;
   }
   
   h5 {
-    @apply text-lg font-medium leading-tight;
+    @apply text-lg font-medium leading-[1.2];
     font-size: 18px;
   }
   
   h6 {
-    @apply text-base font-medium leading-tight;
+    @apply text-base font-medium leading-[1.2];
     font-size: 16px;
   }
 
-  /* Body text */
   p {
-    @apply text-base leading-relaxed;
+    @apply text-base leading-[1.5];
   }
 
   small {
-    @apply text-sm leading-relaxed;
+    @apply text-sm leading-[1.5];
   }
 
   a {
     @apply text-primary hover:text-primary/90 transition-colors;
-    text-decoration: none;
   }
 }
 
