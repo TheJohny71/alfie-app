@@ -1,10 +1,12 @@
+// Copy everything between the ``` and paste into src/components/layout/sidebar.jsx
 import { Calendar, Clock, Users, BarChart } from "lucide-react"
+import { Link } from "react-router-dom"
 
 const navigation = [
-  { name: "Calendar", href: "#", icon: Calendar },
-  { name: "Leave Requests", href: "#", icon: Clock },
-  { name: "Team", href: "#", icon: Users },
-  { name: "Reports", href: "#", icon: BarChart },
+  { name: "Calendar", href: "/", icon: Calendar },
+  { name: "Leave Requests", href: "/requests", icon: Clock },
+  { name: "Team", href: "/team", icon: Users },
+  { name: "Reports", href: "/reports", icon: BarChart },
 ]
 
 export function Sidebar() {
@@ -14,13 +16,13 @@ export function Sidebar() {
         <ul role="list" className="flex flex-1 flex-col gap-y-7 p-4">
           {navigation.map((item) => (
             <li key={item.name}>
-              <a
-                href={item.href}
+              <Link
+                to={item.href}
                 className="group flex gap-x-3 rounded-md p-2 text-sm font-semibold hover:bg-accent hover:text-accent-foreground"
               >
                 <item.icon className="h-5 w-5" />
                 {item.name}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
