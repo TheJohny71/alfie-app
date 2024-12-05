@@ -3,15 +3,15 @@ import { Sidebar } from "./sidebar"
 
 export function Layout({ children }) {
   return (
-    <div className="min-h-screen bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60">
+    <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
-      <div className="flex min-h-[calc(100vh-3.5rem)]">
+      <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 lg:pl-72">
-          <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex-1 lg:pl-72">
+          <main className="min-h-[calc(100vh-3.5rem)] p-4 md:p-6 lg:p-8">
             {children}
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
     </div>
   )
