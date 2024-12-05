@@ -1,4 +1,5 @@
-import { useState } from 'react'
+// Copy everything between the ``` and paste into src/components/calendar/calendar-grid.jsx
+import React, { useState } from 'react'
 
 export function CalendarGrid({ date, view }) {
   const [selectedDates, setSelectedDates] = useState([])
@@ -11,19 +12,33 @@ export function CalendarGrid({ date, view }) {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay()
   }
 
+  const isToday = (date) => {
+    const today = new Date()
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear()
+  }
+
   const renderDays = () => {
     const days = []
     const daysInMonth = getDaysInMonth(date)
     const firstDay = getFirstDayOfMonth(date)
+    const today = new Date()
 
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="h-24 border-t border-l" />)
+      days.push(
+        <div 
+          key={`empty-${i}`} 
+          className="h-24 border-b border-r border-gray-100 dark:border-gray-800/50" 
+        />
+      )
     }
 
     // Add cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(date.getFullYear(), date.getMonth(), day)
+      const isCurrentDay = isToday(currentDate)
       const isSelected = selectedDates.some(d => 
         d.getDate() === currentDate.getDate() &&
         d.getMonth() === currentDate.getMonth() &&
@@ -33,11 +48,26 @@ export function CalendarGrid({ date, view }) {
       days.push(
         <div
           key={day}
-          className={`h-24 border-t border-l p-2 cursor-pointer transition-colors
-            ${isSelected ? 'bg-primary/10' : 'hover:bg-accent'}`}
+          className={`relative h-24 border-b border-r border-gray-100 dark:border-gray-800/50 p-2 
+            transition-colors duration-200 group
+            ${isSelected ? 'bg-purple-50/50 dark:bg-purple-900/20' : 
+              'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
           onClick={() => handleDateClick(currentDate)}
         >
-          <span className="text-sm font-medium">{day}</span>
+          <div className="relative z-10">
+            <span className={`
+              inline-flex items-center justify-center w-8 h-8 rounded-full text-sm
+              ${isCurrentDay ? 'bg-purple-600 text-white font-medium' : 
+                'text-gray-900 dark:text-gray-300 group-hover:bg-white dark:group-hover:bg-gray-700 group-hover:shadow-sm'}
+            `}>
+              {day}
+            </span>
+          </div>
+          
+          {/* Event indicators */}
+          <div className="mt-2 space-y-1">
+            <div className="h-1.5 w-8 rounded-full bg-purple-200 dark:bg-purple-800/50" />
+          </div>
         </div>
       )
     }
@@ -65,10 +95,13 @@ export function CalendarGrid({ date, view }) {
   }
 
   return (
-    <div className="border-r border-b">
-      <div className="grid grid-cols-7 text-sm">
+    <div className="border-t border-l border-gray-100 dark:border-gray-800/50">
+      <div className="grid grid-cols-7">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="py-2 text-center font-medium">
+          <div 
+            key={day} 
+            className="py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400 border-b border-r border-gray-100 dark:border-gray-800/50"
+          >
             {day}
           </div>
         ))}
