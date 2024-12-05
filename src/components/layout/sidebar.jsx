@@ -12,34 +12,65 @@ export function Sidebar() {
   const location = useLocation()
 
   return (
-    <div className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:flex lg:w-72 lg:flex-col bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60 border-r border-gray-200/10 dark:border-gray-800/10">
-      <div className="flex h-14 items-center border-b border-gray-200/10 dark:border-gray-800/10 px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="font-semibold text-lg text-gray-900 dark:text-white">Alfie</span>
-        </Link>
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200/10 bg-white/50 dark:bg-gray-900/50 px-6 pb-4 backdrop-blur-xl">
+          <div className="flex h-14 shrink-0 items-center border-b border-gray-200/10">
+            <Link to="/" className="flex items-center gap-2">
+              <span className="text-lg font-semibold">Alfie</span>
+            </Link>
+          </div>
+          <nav className="flex flex-1 flex-col">
+            <ul role="list" className="flex flex-1 flex-col gap-y-1">
+              {navigation.map((item) => {
+                const isActive = location.pathname === item.href
+                return (
+                  <li key={item.name}>
+                    <Link
+                      to={item.href}
+                      className={`group flex gap-x-3 rounded-md p-2 text-sm font-medium ${
+                        isActive
+                          ? "bg-primary/10 text-primary"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {item.name}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
+        </div>
       </div>
-      <nav className="flex-1">
-        <ul role="list" className="flex flex-col gap-1 p-4">
-          {navigation.map((item) => {
-            const isActive = location.pathname === item.href
-            return (
-              <li key={item.name}>
-                <Link
-                  to={item.href}
-                  className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ease-[cubic-bezier(0.4,0.0,0.2,1)]
-                    ${isActive 
-                      ? 'bg-primary/10 text-primary dark:text-primary-foreground'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white'
+
+      {/* Mobile sidebar */}
+      <div className="lg:hidden">
+        <nav className="flex border-b border-gray-200/10 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl p-4">
+          <ul className="flex gap-x-4">
+            {navigation.map((item) => {
+              const isActive = location.pathname === item.href
+              return (
+                <li key={item.name}>
+                  <Link
+                    to={item.href}
+                    className={`group flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium ${
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white"
                     }`}
-                >
-                  <item.icon className="h-5 w-5 flex-shrink-0" />
-                  {item.name}
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
-    </div>
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span>{item.name}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
+      </div>
+    </>
   )
 }
