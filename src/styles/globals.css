@@ -4,20 +4,16 @@
  
 @layer base {
   :root {
-    --background: 240 240 243; /* #F5F5F7 Apple background gray */
+    --background: 240 240 243;
     --foreground: 0 0 0;
-
-    --primary: 94 92 230; /* #5E5CE6 Apple system purple */
+    --primary: 94 92 230;
     --primary-foreground: 255 255 255;
-
-    --muted: 152 152 157; /* #98989D */
-    --muted-foreground: 99 99 102; /* #636366 */
-    --subtle: 72 72 74;   /* #48484A */
-
-    --success: 52 199 89; /* #34C759 */
-    --warning: 255 159 10; /* #FF9F0A */
-    --destructive: 255 59 48; /* #FF3B30 */
-    
+    --muted: 152 152 157;
+    --muted-foreground: 99 99 102;
+    --subtle: 72 72 74;
+    --success: 52 199 89;
+    --warning: 255 159 10;
+    --destructive: 255 59 48;
     --card: 255 255 255;
     --card-foreground: 0 0 0;
     --popover: 255 255 255;
@@ -30,20 +26,16 @@
   }
  
   .dark {
-    --background: 28 28 30; /* Apple dark gray */
+    --background: 28 28 30;
     --foreground: 255 255 255;
-    
     --primary: 94 92 230;
     --primary-foreground: 255 255 255;
-    
     --muted: 152 152 157;
     --muted-foreground: 161 161 170;
     --subtle: 212 212 216;
-
     --success: 48 209 88;
     --warning: 255 159 10;
     --destructive: 255 69 58;
-    
     --card: 44 44 46;
     --card-foreground: 255 255 255;
     --popover: 44 44 46;
@@ -66,7 +58,6 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Typography Scale */
   h1 {
     @apply text-4xl font-semibold leading-[1.2];
     font-size: 40px;
@@ -110,7 +101,6 @@
   }
 }
 
-/* Animation defaults */
 @layer utilities {
   .transition-default {
     @apply transition-all duration-300 ease-[cubic-bezier(0.4,0.0,0.2,1)];
